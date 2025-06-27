@@ -1,0 +1,26 @@
+// .devcontainer/devcontainer.json
+{
+    "name": "Claude Code Todo App",
+    "build": {
+      "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "GitHub.copilot",
+          "esbenp.prettier-vscode"
+        ]
+      }
+    },
+    "forwardPorts": [3000, 5173], // ReactアプリやViteが使用するポート
+    "postCreateCommand": "sudo chown node:node -R /workspaces",
+    // "postCreateCommand": "bash .devcontainer/init-firewall.sh", // 動画同様、今回はコメントアウト
+    "remoteUser": "node",
+    "mounts": [
+      "source=claude-code-bashhistory,target=/home/node/.bash_history,type=volume",
+      "source=claude-code-config,target=/home/node/.config/claude,type=volume"
+    ],
+    "containerEnv": {
+      "TZ": "Asia/Tokyo" // タイムゾーンを設定
+    }
+  }
