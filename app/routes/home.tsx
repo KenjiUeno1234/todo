@@ -1,51 +1,46 @@
-// import * as schema from "~/database/schema";
-
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
+import { TodoList } from "~/components/TodoList";
+import type { Todo } from "~/types/todo";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "Welcome to React Router!" },
+    { title: "Todo App" },
+    { name: "description", content: "Simple and clean todo list application" },
   ];
 }
 
-export async function action({ request, context }: Route.ActionArgs) {
-  const formData = await request.formData();
-  let name = formData.get("name");
-  let email = formData.get("email");
-  if (typeof name !== "string" || typeof email !== "string") {
-    return { guestBookError: "Name and email are required" };
-  }
-
-  name = name.trim();
-  email = email.trim();
-  if (!name || !email) {
-    return { guestBookError: "Name and email are required" };
-  }
-
-  // Temporarily disable database
-  console.log("Would add to database:", { name, email });
-  return { success: true };
-}
-
 export async function loader({ context }: Route.LoaderArgs) {
-  // Temporarily disable database to test app functionality
-  return {
-    guestBook: [
-      { id: 1, name: "Sample User 1" },
-      { id: 2, name: "Sample User 2" }
-    ],
-    message: "Hello from React Router v7!",
-  };
+  // Hardcoded todo data for testing
+  const todos: Todo[] = [
+    {
+      id: 1,
+      title: "Learn React Router v7",
+      completed: true,
+      created_at: "2024-01-15T10:00:00Z"
+    },
+    {
+      id: 2,
+      title: "Build a todo app",
+      completed: false,
+      created_at: "2024-01-16T09:30:00Z"
+    },
+    {
+      id: 3,
+      title: "Deploy to Cloudflare Workers",
+      completed: false,
+      created_at: "2024-01-17T14:20:00Z"
+    },
+    {
+      id: 4,
+      title: "Add unit tests",
+      completed: false,
+      created_at: "2024-01-18T11:15:00Z"
+    }
+  ];
+
+  return { todos };
 }
 
-export default function Home({ actionData, loaderData }: Route.ComponentProps) {
-  return (
-    <Welcome
-      guestBook={loaderData.guestBook}
-      guestBookError={actionData?.guestBookError}
-      message={loaderData.message}
-    />
-  );
+export default function Home({ loaderData }: Route.ComponentProps) {
+  return <TodoList todos={loaderData.todos} />;
 }
