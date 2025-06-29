@@ -11,6 +11,7 @@ export const TodoItem = ({ todo }: TodoItemProps) => {
         type="checkbox"
         checked={todo.completed}
         readOnly
+        aria-label={`Mark "${todo.title}" as ${todo.completed ? 'incomplete' : 'complete'}`}
         className="mr-3 h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
       />
       <div className="flex-1">
