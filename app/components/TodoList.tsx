@@ -6,19 +6,37 @@ interface TodoListProps {
 }
 
 export const TodoList = ({ todos }: TodoListProps) => {
+  if (!Array.isArray(todos)) {
+    return (
+      <div className="max-w-2xl mx-auto p-6">
+        <div className="text-center py-12">
+          <p className="text-red-500 text-lg">Error: Invalid todo data</p>
+        </div>
+      </div>
+    );
+  }
+
+  const validTodos = todos.filter(todo => 
+    todo && 
+    typeof todo.id !== 'undefined' && 
+    typeof todo.title === 'string' && 
+    typeof todo.completed === 'boolean' &&
+    todo.created_at
+  );
+
   return (
     <div className="max-w-2xl mx-auto p-6">
       <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
         Todo List
       </h1>
       
-      {todos.length === 0 ? (
+      {validTodos.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">No todos yet!</p>
         </div>
       ) : (
         <div className="space-y-4">
-          {todos.map((todo) => (
+          {validTodos.map((todo) => (
             <TodoItem key={todo.id} todo={todo} />
           ))}
         </div>
@@ -26,9 +44,9 @@ export const TodoList = ({ todos }: TodoListProps) => {
       
       <div className="mt-8 text-center">
         <p className="text-gray-600">
-          Total: {todos.length} todos | 
-          Completed: {todos.filter(t => t.completed).length} | 
-          Remaining: {todos.filter(t => !t.completed).length}
+          Total: {validTodos.length} todos | 
+          Completed: {validTodos.filter(t => t.completed).length} | 
+          Remaining: {validTodos.filter(t => !t.completed).length}
         </p>
       </div>
     </div>
